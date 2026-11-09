@@ -1,0 +1,91 @@
+# Messaging Basics
+
+The core of any chat app. If this breaks, nothing else matters.
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Send / receive text | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Rich text (bold, italic, code, lists) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Markdown input | ✅ | ⚠️ | ⚠️ | ✅ | ✅ | ✅ |
+| Edit message | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Edit history visible | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Delete for everyone | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Delete for me only | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| Mentions (@user, @channel, @here) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Link previews | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Emoji, GIFs, stickers | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+| Code blocks with syntax highlight | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Drafts saved per conversation | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Scheduled send | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ |
+| Pin messages | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Forward message | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Quote / reply to message | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Read receipts | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Typing indicators | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Disappearing messages | ❌ | ❌ | ✅ | ✅ | ❌ | ⚠️ |
+| Polls | ⚠️ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Voice messages | ⚠️ | ⚠️ | ✅ | ✅ | ✅ | ✅ |
+| Save / bookmark message | ✅ | ✅ | ✅ | ✅ | ❌ | ⚠️ |
+| Message translation | ⚠️ | ✅ | ❌ | ⚠️ | ❌ | ❌ |
+| Urgent / priority message | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Silent message (no notification) | ❌ | ❌ | ❌ | ✅ | ✅ | ⚠️ |
+| Slash commands | ✅ | ⚠️ | ❌ | ✅ | ✅ | ✅ |
+
+## Test cases
+
+### Sending
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| MSG-01 | P0 | Happy | Send plain text in a DM and a group | Appears instantly for sender, delivered to all members |
+| MSG-02 | P0 | Edge | Send empty or whitespace-only message | Send disabled or rejected |
+| MSG-03 | P0 | Edge | Send at max length, and max + 1 character | Max accepted; over-limit shows clear error, no silent truncation |
+| MSG-04 | P1 | Edge | Emoji-only, RTL text (Arabic/Hebrew), mixed RTL+LTR, zero-width chars | Renders correctly, cursor and alignment correct |
+| MSG-05 | P0 | Security | Send HTML/script (script tag, img with onerror) | Shown as text, never executed |
+| MSG-06 | P1 | Edge | Paste 10,000 lines of text | No freeze; offered as file or collapsed |
+| MSG-07 | P0 | Edge | Send 50 messages rapidly | All delivered, order kept, no duplicates |
+| MSG-08 | P0 | Edge | Send while offline, then reconnect | Pending state, sends on reconnect, order kept |
+| MSG-09 | P1 | Negative | Server rejects the message | Clear failed state with Retry and Delete |
+| MSG-10 | P1 | Edge | Double-click send / double Enter | No accidental duplicates |
+| MSG-11 | P1 | Edge | Enter during IME composition (Japanese/Chinese) | Does not send mid-composition |
+| MSG-12 | P1 | Negative | Send to a room you were just removed from | Rejected with clear message |
+
+### Editing and deleting
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| MSG-20 | P0 | Happy | Edit own message | Updated for all, "(edited)" label |
+| MSG-21 | P0 | Security | Edit/delete someone else's message without permission | Blocked in UI and by server API |
+| MSG-22 | P1 | Edge | Edit a message that is quoted in a reply | Reply preview behaviour is consistent |
+| MSG-23 | P1 | Edge | Edit while recipient is offline | Recipient sees final version on reconnect |
+| MSG-24 | P0 | Happy | Delete message | Removed for everyone |
+| MSG-25 | P1 | Edge | Delete a message with thread, reactions or pin | Cleaned up, no orphan UI |
+| MSG-26 | P1 | Edge | Admin deletes a user's message | Works and is in the audit log |
+| MSG-27 | P1 | Edge | Edit time limit (if any) expires | Edit option gone; server also enforces |
+| MSG-28 | P0 | Security | Deleted content in notifications, search index, push payload | Removed everywhere |
+
+### Mentions and formatting
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| MSG-30 | P0 | Happy | @mention a member | Autocomplete works, highlighted, user notified |
+| MSG-31 | P1 | Edge | @mention a non-member | Prompt to invite or clear warning |
+| MSG-32 | P1 | Edge | @room in a room of 1,000+ members | Permission check and confirmation |
+| MSG-33 | P1 | Edge | User renames after being mentioned | Old mention still points to the right person |
+| MSG-34 | P2 | Edge | Unclosed markdown, nested code blocks, URLs with underscores | Renders sensibly |
+| MSG-35 | P1 | Security | Link text says bank.com but URL goes elsewhere | Real URL visible before opening |
+| MSG-36 | P2 | Edge | Link preview for slow, 404 or huge page | Times out gracefully |
+
+### Receipts, typing, drafts, polls
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| MSG-40 | P1 | Happy | Recipient reads message | Read receipt updates in real time |
+| MSG-41 | P1 | Edge | User turns off read receipts | Others do not see their receipts |
+| MSG-42 | P2 | Edge | User stops typing or closes app | Typing indicator clears within seconds |
+| MSG-43 | P1 | Happy | Switch rooms, restart app | Draft restored |
+| MSG-44 | P1 | Edge | Scheduled message, sender offline at send time | Still sends on time (server-side) |
+| MSG-45 | P2 | Edge | Disappearing message on an offline device | Removed after the timer once it syncs |
+| MSG-46 | P1 | Edge | Poll: vote, change vote, end poll, vote after end | Counts correct, closed poll rejects votes |

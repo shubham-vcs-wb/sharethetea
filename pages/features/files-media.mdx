@@ -1,0 +1,40 @@
+# Files & Media
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Upload any file type | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Drag-and-drop / paste image | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Image / video gallery | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| In-app PDF / Office preview | ✅ | ✅ | ⚠️ | ⚠️ | ❌ | ❌ |
+| Co-editing documents | ⚠️ Canvas | ✅ Office | ❌ | ❌ | ❌ | ❌ |
+| Files tab per channel | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Send original vs compressed | ❌ | ❌ | ✅ | ✅ | ❌ | ✅ |
+| Malware scanning | ✅ | ✅ | ⚠️ | ⚠️ | ✅ | ⚠️ add-on |
+| Location sharing (static / live) | ❌ | ⚠️ | ✅ | ✅ | ❌ | ✅ |
+| Contact card sharing | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+
+Upload limits differ a lot (roughly: Slack 1 GB, WhatsApp 2 GB, Telegram 2–4 GB, Discord small on free tier, Teams via SharePoint). On Element/Synapse it is your `max_upload_size` setting.
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| FIL-01 | P0 | Happy | Upload image, video, PDF, ZIP | Progress shown; recipients can open |
+| FIL-02 | P0 | Edge | File at exact size limit, and limit + 1 byte | Over-limit error before upload starts |
+| FIL-03 | P0 | Edge | Network drops mid-upload | Resume or clear retry; no half file sent |
+| FIL-04 | P1 | Edge | Cancel upload midway | Nothing sent |
+| FIL-05 | P1 | Security | File named with unicode, 255 chars, or `../../etc/passwd` | Saved safely, no path traversal |
+| FIL-06 | P0 | Security | Executable renamed .jpg; SVG with script; HTML file | Never executed inline; safe content type |
+| FIL-07 | P0 | Security | Open private room media URL while logged out | Denied (authenticated media) |
+| FIL-08 | P1 | Edge | Corrupt image, zero-byte file, 0-second video | Placeholder, no crash |
+| FIL-09 | P1 | Edge | Upload 20 files at once | All sent, order kept |
+| FIL-10 | P1 | Edge | HEIC, 50 MP image, animated GIF, WebP | Thumbnails work |
+| FIL-11 | P1 | Security | Photo with GPS EXIF data | Stripped, or user warned |
+| FIL-12 | P0 | Security | Upload in encrypted room | Encrypted client-side; server stores ciphertext only |
+| FIL-13 | P1 | Edge | Delete message with file | File no longer downloadable |
+| FIL-14 | P2 | Edge | Storage quota reached | Clear error |
+| FIL-15 | P1 | Happy | Voice message: record, cancel, send, play at 1.5x | Waveform and playback correct |
+| FIL-16 | P1 | Negative | Mic permission denied | Clear prompt to enable |
+| FIL-17 | P2 | Happy | Live location share, then stop | Stops everywhere when ended or expired |

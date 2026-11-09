@@ -1,0 +1,32 @@
+# Authentication & Accounts
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Email + password | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Phone number + OTP | ❌ | ⚠️ | ✅ | ✅ | ⚠️ | ⚠️ |
+| Magic link / email code | ✅ | ✅ | ❌ | ✅ | ❌ | ⚠️ |
+| SSO: SAML / OIDC | ✅ | ✅ Entra ID | ❌ | ❌ | ❌ | ✅ |
+| Two-factor (TOTP / passkey) | ✅ | ✅ | ✅ PIN | ✅ password | ✅ | ✅ via IdP / MAS |
+| SCIM user provisioning | ✅ | ✅ | ❌ | ❌ | ❌ | ⚠️ |
+| QR login from another device | ❌ | ⚠️ | ✅ | ✅ | ✅ | ✅ |
+| Account deactivation / deletion | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Data export (GDPR) | ✅ admin | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| AUTH-01 | P0 | Happy | Sign up, verify email, log in | Works end to end |
+| AUTH-02 | P0 | Security | Wrong password 10 times | Rate limit / lockout; no user enumeration in errors |
+| AUTH-03 | P0 | Happy | SSO login with Okta / Entra / Google | Works; logout also ends SSO session if configured |
+| AUTH-04 | P0 | Security | User disabled in IdP / SCIM | Loses access within minutes, all sessions end |
+| AUTH-05 | P0 | Happy | Password reset | Old sessions handled per policy; link single-use and expires |
+| AUTH-06 | P1 | Security | Reuse old reset link | Rejected |
+| AUTH-07 | P1 | Edge | Access token expires mid-use | Refreshed silently; no data loss |
+| AUTH-08 | P1 | Happy | 2FA enrol, login, lose device, recovery codes | All paths work |
+| AUTH-09 | P1 | Happy | QR login | Works; QR expires quickly |
+| AUTH-10 | P0 | Happy | Deactivate account | Cannot log in; messages kept or erased per GDPR choice |
+| AUTH-11 | P1 | Edge | Same email with different case / plus-alias | Handled consistently |
+| AUTH-12 | P1 | Edge | Username taken, reserved names (admin, support) | Rejected |

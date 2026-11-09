@@ -1,0 +1,15 @@
+# Multi-device Sync
+
+Most users have a phone and a laptop. Everything must agree across them.
+
+| ID | Priority | Scenario | Expected |
+| --- | --- | --- | --- |
+| SYN-01 | P0 | Send on phone | Appears on desktop in real time |
+| SYN-02 | P0 | Read on desktop | Unread badge clears on phone |
+| SYN-03 | P1 | Mute / favourite on one device | Same on others |
+| SYN-04 | P1 | Draft on one device | Per design (local only, or synced) |
+| SYN-05 | P1 | Settings change (theme, notification rules) | Account-level settings sync |
+| SYN-06 | P0 | Call rings on all devices | Answer on one stops all others |
+| SYN-07 | P1 | 5+ active sessions | All in sync, no rate-limit errors |
+| SYN-08 | P1 | Device offline for 30 days then reopened | Catches up or does a clean resync |
+| SYN-09 | P0 | Remove a device | It stops receiving data immediately |

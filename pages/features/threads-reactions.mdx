@@ -1,0 +1,30 @@
+# Threads, Replies & Reactions
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Inline reply (quote) | ⚠️ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Threads | ✅ | ✅ | ❌ | ✅ topics | ✅ | ✅ |
+| "Also send to channel" from thread | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Thread list / follow | ✅ | ⚠️ | ❌ | ⚠️ | ✅ | ✅ |
+| Emoji reactions | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Custom emoji | ✅ | ✅ | ❌ | ✅ | ✅ | ⚠️ |
+| See who reacted | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| THR-01 | P0 | Happy | Start thread, reply, open thread panel | Replies stay in thread; count on root |
+| THR-02 | P1 | Edge | Root message deleted | Thread still reachable or closes cleanly |
+| THR-03 | P1 | Edge | Thread with 1,000+ replies | Paginates, no freeze |
+| THR-04 | P1 | Happy | Thread unread counts | Separate from main timeline, clear on read |
+| THR-05 | P1 | Edge | Reply to a message far back in history | Jump-to-original loads it |
+| THR-06 | P1 | Edge | Mention inside a thread | Notifies and deep-links into thread |
+| THR-07 | P2 | Edge | Older client without thread support | Fallback shows normal replies |
+| RCT-01 | P0 | Happy | Add and remove reaction | Count updates live for all |
+| RCT-02 | P1 | Edge | Two users add same emoji at once | Count is 2, nothing lost |
+| RCT-03 | P1 | Edge | Same user taps same reaction twice fast | One reaction only |
+| RCT-04 | P2 | Edge | 50+ reaction types on one message | Wraps, "show all" works |
+| RCT-05 | P2 | Edge | Custom emoji deleted after use | Placeholder, no crash |

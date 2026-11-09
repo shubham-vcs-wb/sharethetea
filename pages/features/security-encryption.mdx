@@ -1,0 +1,47 @@
+# Security & Encryption
+
+Element's biggest selling point. Also the area with the hardest bugs (lost keys, "unable to decrypt").
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Encryption in transit and at rest | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| End-to-end encrypted messages by default | ❌ | ❌ | ✅ | ❌ (secret chats only) | ❌ | ✅ |
+| Customer-managed keys (EKM / BYOK) | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ self-host |
+| Device verification (emoji / QR) | ❌ | ❌ | ✅ security code | ⚠️ | ❌ | ✅ |
+| Cross-signing / trusted devices | ❌ | ❌ | ⚠️ | ❌ | ❌ | ✅ |
+| Encrypted key backup / recovery key | n/a | n/a | ✅ | n/a | n/a | ✅ |
+| Remote device sign-out | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Screenshot blocking | ❌ | ⚠️ Intune | ⚠️ view-once | ✅ secret chats | ❌ | ⚠️ |
+| App lock (PIN / biometric) | ⚠️ MDM | ⚠️ MDM | ✅ | ✅ | ❌ | ✅ mobile |
+| Self-hosting / data residency | ❌ | ⚠️ region | ❌ | ❌ | ❌ | ✅ |
+
+## Test cases
+
+### Encryption
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| E2E-01 | P0 | Security | Inspect server database / network for an encrypted room | Only ciphertext |
+| E2E-02 | P0 | Happy | New member joins encrypted room | Sees messages from join onward (per history setting) |
+| E2E-03 | P0 | Edge | Log in on new device | Verify with old device or recovery key; history decrypts |
+| E2E-04 | P0 | Edge | Lose all devices, have recovery key | Full history restored |
+| E2E-05 | P0 | Edge | Lose all devices and recovery key | Reset identity; user clearly warned history is lost |
+| E2E-06 | P0 | Edge | "Unable to decrypt" rate across 1,000 messages | Near zero; track as a metric |
+| E2E-07 | P1 | Security | Unverified device of a contact joins | Warning shown |
+| E2E-08 | P1 | Security | Contact's identity key changes | Visible alert |
+| E2E-09 | P1 | Happy | Emoji / QR verification | Both sides marked verified |
+| E2E-10 | P1 | Edge | Verification cancelled half-way, or mismatch | Not verified, clear message |
+| E2E-11 | P1 | Edge | Encryption cannot be turned off once on | Toggle locked |
+| E2E-12 | P1 | Edge | Room with 500 members, messages sent | Key sharing does not stall sending |
+| E2E-13 | P1 | Edge | Export and import room keys | Works with passphrase |
+
+### Device and session
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| SEC-01 | P0 | Security | Sign out a lost device remotely | Session dead on that device right away |
+| SEC-02 | P0 | Security | Logout clears local data | No messages, keys or tokens left on disk |
+| SEC-03 | P1 | Happy | App lock PIN / biometrics | Required after timeout |
+| SEC-04 | P1 | Security | Session list shows device, IP, last active | Accurate |

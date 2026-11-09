@@ -1,0 +1,20 @@
+# Security Testing
+
+Run these before every major release. Get an external penetration test at least once a year — enterprise buyers will ask for the report.
+
+Reference: OWASP ASVS, OWASP Mobile Top 10.
+
+| ID | Priority | Area | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| SECT-01 | P0 | XSS | Script in message, name, room topic, file name, link preview | Never runs |
+| SECT-02 | P0 | Access control | Change room / user / file IDs in API calls (IDOR) | 403 for anything not yours |
+| SECT-03 | P0 | Auth | Use token after logout | Rejected |
+| SECT-04 | P0 | Transport | TLS 1.2+ only; HSTS on | Verified with SSL Labs |
+| SECT-05 | P0 | Secrets | Tokens in logs, URLs, crash reports | None found |
+| SECT-06 | P1 | Rate limiting | Spam login, messages, invites, uploads | Throttled |
+| SECT-07 | P1 | CSP | Content-Security-Policy header | Strict, no unsafe-eval |
+| SECT-08 | P1 | Dependencies | Scan for known CVEs | No high / critical |
+| SECT-09 | P1 | Electron | nodeIntegration off, contextIsolation on | Verified |
+| SECT-10 | P1 | Mobile | Data storage encrypted, no data in backups / screenshots in app switcher | Verified |
+| SECT-11 | P1 | Federation | Malicious remote server sends bad events | Rejected, no crash |
+| SECT-12 | P1 | SSRF | Link preview pointing to internal IPs (127.0.0.1, 169.254.169.254) | Blocked |

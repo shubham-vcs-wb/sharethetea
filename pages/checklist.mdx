@@ -1,0 +1,50 @@
+# Release Checklist
+
+Go through this before every release. Every box should be ticked or have a written reason.
+
+## Must pass (P0)
+
+- [ ] All P0 test cases on every feature page pass
+- [ ] Send / receive / edit / delete works in DM, group and encrypted room
+- [ ] 1:1 and group call connect on web, desktop, iOS and Android
+- [ ] Calls work behind a strict firewall (TURN on 443)
+- [ ] Push notifications arrive with app killed on iOS and Android
+- [ ] New-device login restores encrypted history
+- [ ] Removed / banned users lose access immediately
+- [ ] No plaintext from encrypted rooms on server or in push
+- [ ] Offline sending recovers with order kept
+- [ ] No new crash in crash reporting dashboards
+
+## Should pass (P1)
+
+- [ ] Performance targets met (see Performance page)
+- [ ] Accessibility scan has no critical issues
+- [ ] Translations complete for supported languages
+- [ ] Admin actions show in audit log
+- [ ] Upgrade from previous version keeps data and sessions
+
+## Feature gap tracker
+
+Use this to compare your app with the market. Copy into a spreadsheet and fill in "Us".
+
+| Area | Must-have to compete | Us |
+| --- | --- | --- |
+| Messaging | Edit, delete, mentions, threads, reactions, pins, polls, voice notes | |
+| Messaging | Scheduled send, message translation, bookmarks | |
+| Calls | 1:1, group, screen share, add / remove people | |
+| Calls | Hold, call waiting, merge, transfer, forward, voicemail | |
+| Calls | Recording, live captions, noise suppression, blur | |
+| Meetings | Scheduling with calendar sync, lobby, guest links | |
+| Meetings | Breakout rooms, webinars, attendance reports | |
+| Files | Preview, malware scanning, co-editing | |
+| Search | Full-text in encrypted rooms on all platforms | |
+| Notifications | Keyword alerts, DND schedule, email digests | |
+| Presence | Auto "in a call / meeting" status, out-of-office | |
+| Integrations | Webhooks, bots, interactive messages, workflow builder | |
+| Integrations | Jira, GitHub, Google Drive, Microsoft 365, Salesforce | |
+| AI | Summaries, search answers, meeting notes | |
+| Security | E2EE, device verification, app lock, remote wipe | |
+| Identity | SSO (SAML/OIDC), SCIM, 2FA | |
+| Compliance | Retention, legal hold, eDiscovery, audit log, DLP | |
+| Compliance | SOC 2, ISO 27001, GDPR, HIPAA paperwork | |
+| Accessibility | WCAG 2.1 AA + published VPAT | |

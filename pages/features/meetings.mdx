@@ -1,0 +1,44 @@
+# Meetings & Conferencing
+
+Scheduled or large calls. Teams and Zoom set the bar here.
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Schedule meeting with calendar invite | ⚠️ apps | ✅ | ⚠️ call links | ❌ | ⚠️ events | ❌ |
+| Outlook / Google Calendar sync | ⚠️ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Meeting link for guests (no account) | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ Element Call |
+| Lobby / waiting room | ❌ | ✅ | ❌ | ❌ | ❌ | ⚠️ knock |
+| Roles: organizer, presenter, attendee | ❌ | ✅ | ❌ | ✅ | ⚠️ | ⚠️ |
+| Meeting chat that persists | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Breakout rooms | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Recording + transcript | ⚠️ | ✅ | ❌ | ✅ | ❌ | ❌ |
+| Live captions / translation | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| AI meeting summary | ✅ | ✅ Copilot | ❌ | ❌ | ❌ | ❌ |
+| Webinar / town hall (view-only audience) | ❌ | ✅ | ❌ | ✅ livestream | ✅ stage | ❌ |
+| Polls / Q&A during meeting | ⚠️ | ✅ | ❌ | ❌ | ✅ | ⚠️ |
+| Whiteboard | ⚠️ | ✅ | ❌ | ❌ | ❌ | ⚠️ widget |
+| Dial-in by phone | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Attendance report | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| MTG-01 | P0 | Happy | Schedule meeting, invitees get calendar invite | Correct time in each invitee's time zone |
+| MTG-02 | P1 | Edge | Meeting across DST change; recurring meeting edit "this one / all" | Times correct |
+| MTG-03 | P1 | Edge | Organizer cancels; time changes | Invitees updated |
+| MTG-04 | P0 | Happy | Guest joins by link without account | Name prompt, lobby if enabled |
+| MTG-05 | P0 | Security | Guest tries to open chat history or files beyond meeting | Blocked |
+| MTG-06 | P1 | Happy | Lobby: admit one, admit all, deny | Works; denied guest cannot retry endlessly |
+| MTG-07 | P1 | Edge | Organizer is late; lobby holds people | Clear "waiting for host" |
+| MTG-08 | P1 | Happy | Presenter vs attendee permissions | Attendees cannot share screen or unmute if disabled |
+| MTG-09 | P1 | Happy | Breakout rooms: create, assign, close, return | Everyone returns to main room |
+| MTG-10 | P1 | Happy | Recording start / stop | Everyone notified; file saved with right access |
+| MTG-11 | P1 | Edge | Recorder leaves; meeting continues | Recording continues or stops per design |
+| MTG-12 | P2 | Happy | Live captions in noisy room, accents | Readable accuracy |
+| MTG-13 | P1 | Load | 100 / 300 / 1,000 participants | Join under 5 s, no CPU melt on low-end laptops |
+| MTG-14 | P1 | Edge | 50 people join in the same second | All join, no server errors |
+| MTG-15 | P2 | Happy | Attendance report | Accurate join/leave times |
+| MTG-16 | P1 | Edge | Meeting link reused after meeting ended | Opens new session or shows ended, per design |

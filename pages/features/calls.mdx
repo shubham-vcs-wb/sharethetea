@@ -1,0 +1,170 @@
+# Voice & Video Calls
+
+Calls are where users notice bugs fastest. A dropped call is worse than a dropped message.
+
+## Call feature glossary
+
+Plain-English meaning of each feature, so you know what to build and test.
+
+| Feature | What it means |
+| --- | --- |
+| 1:1 call | Voice or video between two people |
+| Group call | Three or more people in one call |
+| Escalate 1:1 to group | Add a third person to a running 1:1 call |
+| Add / invite to call | Ring someone new into an active call |
+| Remove (kick) from call | Host drops a participant |
+| Mute others / mute all | Host mutes someone else's mic |
+| Hold / resume | Pause a call (both sides hear silence or hold music) without hanging up |
+| Call waiting | A second call rings while you are already on a call |
+| Answer and hold / answer and end | Choices when a second call arrives |
+| Merge calls | Join a held call and the active call into one group call |
+| Swap calls | Switch between a held call and an active call |
+| Blind (cold) transfer | Send the call to someone else without talking to them first |
+| Attended (warm) transfer / consult | Talk to the target first, then hand the call over |
+| Forward / divert | Auto-send incoming calls elsewhere (always, if busy, if no answer) |
+| Call park / pickup | Park a call in a slot; anyone picks it up from another device |
+| Delegation / boss-assistant | Assistant answers calls on behalf of a manager |
+| Call queues / hunt groups | Ring a team; first free agent answers |
+| Voicemail | Leave and play back recorded messages, with transcription |
+| PSTN / dial-pad | Call real phone numbers; send DTMF tones for IVR menus |
+| Device handoff | Move a live call from laptop to phone without dropping |
+| Ringing on all devices | Every logged-in device rings; answering on one stops the rest |
+| Call history / missed calls | Log of calls with duration and status |
+| Recording & transcription | Save the call and its text |
+| Noise suppression / background blur | Clean up audio and video |
+| Raise hand | Ask to speak in a group call |
+| Spotlight / pin video | Keep one person large on screen |
+| Picture-in-picture | Small floating call window while using the rest of the app |
+| Walkie-talkie / push-to-talk | Hold a button to speak |
+| Voice channels (drop-in) | Always-open audio room you join and leave freely (Discord, Slack Huddles) |
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1:1 voice / video | ✅ Huddle | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Group call | ✅ (50) | ✅ (1,000) | ✅ (32) | ✅ (1,000 video viewers) | ✅ (25 video) | ✅ Element Call |
+| Add person to running call | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ (group) |
+| Remove participant | ⚠️ | ✅ | ❌ | ✅ | ✅ | ⚠️ |
+| Mute others | ⚠️ | ✅ | ❌ | ✅ | ✅ | ⚠️ |
+| Hold / resume | ❌ | ✅ | ⚠️ (auto on 2nd call) | ❌ | ❌ | ⚠️ (1:1 only) |
+| Call waiting | ❌ | ✅ | ✅ | ✅ | ❌ | ⚠️ |
+| Merge calls | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Transfer (blind / consult) | ❌ | ✅ (Teams Phone) | ❌ | ❌ | ❌ | ⚠️ (transfer API in 1:1) |
+| Forwarding / divert | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Call park | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Delegation | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Call queues | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Voicemail | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| PSTN / dial-pad | ❌ | ✅ add-on | ❌ | ❌ | ❌ | ⚠️ via bridge |
+| Device handoff | ⚠️ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Recording | ✅ clips | ✅ | ❌ | ✅ | ❌ | ❌ |
+| Live captions | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Noise suppression | ✅ | ✅ | ✅ | ✅ | ✅ Krisp | ✅ |
+| Background blur / replace | ✅ | ✅ | ✅ | ✅ | ✅ Nitro | ✅ blur |
+| Raise hand / reactions | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Picture-in-picture | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| E2E encrypted calls | ❌ | ⚠️ 1:1 option | ✅ | ✅ 1:1 & group | ✅ (DAVE) | ✅ |
+| Persistent voice channels | ✅ Huddle | ❌ | ❌ | ✅ voice chats | ✅ | ✅ (call in room) |
+
+## Test cases
+
+### Call setup
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CALL-01 | P0 | Happy | Start 1:1 voice call, callee answers | Two-way audio within 2–3 seconds |
+| CALL-02 | P0 | Happy | Start 1:1 video call | Both videos visible, correct orientation |
+| CALL-03 | P0 | Negative | Callee declines | Caller sees "declined", call logged |
+| CALL-04 | P0 | Edge | Callee does not answer | Rings for a set time, then "no answer" + missed-call notification |
+| CALL-05 | P0 | Edge | Caller hangs up while it is still ringing | Ringing stops on all callee devices immediately |
+| CALL-06 | P0 | Edge | Both users call each other at the same moment (glare) | One call wins; no two half-open calls |
+| CALL-07 | P0 | Edge | Callee logged in on 3 devices | All ring; answering on one stops the rest |
+| CALL-08 | P0 | Edge | Callee app closed / phone locked | Push wakes app; native call screen (CallKit / ConnectionService) |
+| CALL-09 | P1 | Negative | Callee is offline for a long time | Caller told quickly, not endless ringing |
+| CALL-10 | P0 | Negative | Mic or camera permission denied | Clear message, can continue audio-only |
+| CALL-11 | P1 | Edge | Camera used by another app | Graceful fallback to audio |
+| CALL-12 | P1 | Edge | Blocked user calls you | Call never rings |
+| CALL-13 | P1 | Edge | Calling a deactivated user or a room you were removed from | Blocked with clear message |
+
+### In-call controls
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CALL-20 | P0 | Happy | Mute / unmute mic | Other side hears silence; icon updates for all |
+| CALL-21 | P0 | Happy | Camera on / off | Avatar shown when off |
+| CALL-22 | P1 | Edge | Speak while muted | "You are muted" hint |
+| CALL-23 | P1 | Happy | Switch mic, speaker, camera mid-call | Switches without dropping |
+| CALL-24 | P1 | Edge | Unplug headset / Bluetooth disconnects mid-call | Falls back to next device, call continues |
+| CALL-25 | P1 | Edge | Plug in headset mid-call | Audio moves to headset |
+| CALL-26 | P1 | Happy | Switch front/back camera on mobile | Works, no freeze |
+| CALL-27 | P2 | Happy | Background blur, noise suppression | Works without big CPU spike |
+| CALL-28 | P1 | Happy | Picture-in-picture, then navigate in app | Call keeps running, controls work |
+| CALL-29 | P1 | Edge | Close the call window / tab | Asks to confirm or leaves cleanly; nobody left in a ghost state |
+
+### Adding, removing, escalating
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CALL-30 | P0 | Happy | Add third person to 1:1 call | Becomes group call; no one is dropped |
+| CALL-31 | P1 | Edge | Invitee declines / does not answer | Existing call unaffected |
+| CALL-32 | P1 | Edge | Add someone who is already on another call | Call waiting shown to them, or "busy" to you |
+| CALL-33 | P0 | Happy | Host removes a participant | Removed user disconnected and cannot rejoin without invite |
+| CALL-34 | P1 | Security | Non-host tries to remove or mute others | Blocked by server |
+| CALL-35 | P1 | Happy | Host mutes one person / mutes all | Target is muted and told; can they unmute? (per policy) |
+| CALL-36 | P1 | Edge | Host leaves the call | Host role passes on, or call ends per policy |
+| CALL-37 | P1 | Edge | Group reaches participant limit | Next joiner gets clear "call full" |
+| CALL-38 | P1 | Edge | Person removed from room while in its call | Also removed from call |
+
+### Hold, waiting, merge, swap
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CALL-40 | P0 | Happy | Put call on hold, resume | Both sides see "on hold"; media paused then restored |
+| CALL-41 | P1 | Edge | Other side hangs up while you hold | Held call ends, UI clears |
+| CALL-42 | P1 | Edge | Both sides press hold | Resuming needs both sides to resume |
+| CALL-43 | P0 | Happy | Second call arrives during a call | Call-waiting tone + banner with Answer & Hold / Decline / Answer & End |
+| CALL-44 | P0 | Happy | Answer & Hold | First call held, second active |
+| CALL-45 | P1 | Happy | Swap between the two calls | Only one active at a time |
+| CALL-46 | P1 | Happy | Merge calls | All three in one call |
+| CALL-47 | P1 | Edge | Merge when one call is video and one is audio | Clear behaviour, no crash |
+| CALL-48 | P1 | Edge | Incoming native phone (GSM) call during app call | App call held or kept per OS rules; resumes after |
+| CALL-49 | P2 | Edge | Hold for 30+ minutes | Call still resumes (no silent timeout) |
+
+### Transfer, forward, voicemail (business telephony)
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CALL-50 | P1 | Happy | Blind transfer to user B | Caller connected to B, you are dropped |
+| CALL-51 | P1 | Happy | Consult (warm) transfer | You talk to B first, then complete transfer |
+| CALL-52 | P1 | Edge | Transfer target declines or does not answer | Call returns to you, not lost |
+| CALL-53 | P1 | Happy | Forward always / when busy / no answer | Rules applied correctly |
+| CALL-54 | P1 | Edge | Forwarding loop (A to B, B to A) | Loop detected and stopped |
+| CALL-55 | P2 | Happy | Voicemail leave, play, transcript | Works, notifies recipient |
+| CALL-56 | P2 | Happy | DTMF tones to an IVR | Tones recognised |
+
+### Network and quality
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CALL-60 | P0 | Edge | Switch Wi-Fi to 4G mid-call | Reconnects within seconds (ICE restart), no hang-up |
+| CALL-61 | P0 | Edge | 5-second network loss | "Reconnecting" banner, then recovers |
+| CALL-62 | P0 | Edge | 60-second network loss | Call ends cleanly for both, logged |
+| CALL-63 | P0 | Edge | Behind strict corporate firewall / symmetric NAT | Connects via TURN (UDP, TCP, and TLS on 443) |
+| CALL-64 | P1 | Edge | 10% packet loss, 300 ms latency, 256 kbps | Audio still clear; video drops quality first |
+| CALL-65 | P1 | Edge | One participant on very bad network in group call | Others not affected (simulcast / SFU) |
+| CALL-66 | P1 | Happy | Call stats / quality indicator | Shows bad network warning |
+| CALL-67 | P1 | Edge | 2-hour call | No memory leak, no audio drift, battery reasonable |
+| CALL-68 | P1 | Edge | Laptop sleeps mid-call, then wakes | Call ended or recovered; UI not stuck |
+| CALL-69 | P2 | Edge | Echo with no headphones / two devices in same room | Echo cancellation works |
+
+### History, notifications, security
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CALL-70 | P1 | Happy | Call history | Shows type, direction, duration, missed calls |
+| CALL-71 | P1 | Edge | Missed call while in Do Not Disturb | No ring; missed-call notice still logged |
+| CALL-72 | P0 | Security | Join a group call via URL without room access | Denied |
+| CALL-73 | P0 | Security | Media path in encrypted room | Media is end-to-end encrypted (verify with packet capture) |
+| CALL-74 | P1 | Security | Recording started | Everyone sees a recording indicator and is told |
+| CALL-75 | P1 | Edge | Call notification sound respects OS volume / silent mode | Yes |

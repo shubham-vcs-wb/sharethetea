@@ -1,0 +1,51 @@
+# Chat & Call Feature Guide
+
+A reference for building and testing an enterprise chat and calling app.
+It lists what the big players ship — **Slack, Microsoft Teams, WhatsApp, Telegram, Discord and Element (Matrix)** — and the test cases you need to prove each feature works.
+
+## How to use this guide
+
+1. Pick a feature area from the sidebar.
+2. Read the **feature list** and mark which ones your app has.
+3. Run the **test cases** for every feature you ship. Pay special attention to the edge cases.
+4. Use the [Release Checklist](/checklist) before each release.
+
+## Comparison legend
+
+| Symbol | Meaning |
+| --- | --- |
+| ✅ | Built in |
+| ⚠️ | Partial, paid tier only, or via add-on |
+| ❌ | Not available |
+
+Competitor support changes often. Treat the tables as a starting point and check the vendor docs before making sales claims:
+
+- Slack: https://slack.com/help
+- Microsoft Teams: https://support.microsoft.com/teams
+- WhatsApp: https://faq.whatsapp.com
+- Telegram: https://telegram.org/faq
+- Discord: https://support.discord.com
+- Element / Matrix: https://element.io/help and https://spec.matrix.org
+
+## Test case format
+
+Each test case has an ID so you can track it in your test tool.
+
+| Field | Meaning |
+| --- | --- |
+| **ID** | Area prefix + number, e.g. `MSG-01` |
+| **Priority** | **P0** = release blocker, **P1** = must fix soon, **P2** = nice to have |
+| **Type** | Happy path, edge case, negative, or security |
+
+## Element baseline
+
+Your app is built on Element, so you get these for free (but still must test them after any change):
+
+- Rooms, DMs, spaces, threads, reactions, edits, redactions
+- End-to-end encryption, cross-signing, key backup, device verification
+- 1:1 calls (legacy VoIP) and group calls (Element Call / MatrixRTC)
+- Widgets, integration managers, bots via the Matrix API
+- Federation with other Matrix servers
+- SSO/OIDC login via the homeserver
+
+Features Element does **not** have out of the box (common enterprise gaps): call hold/transfer UX parity with PBX systems, call recording, meeting scheduling with calendar sync, live captions, breakout rooms, message scheduling, read-receipt reports, eDiscovery and legal hold UI.

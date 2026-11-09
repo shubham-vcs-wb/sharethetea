@@ -1,0 +1,38 @@
+# Notifications
+
+Missing a notification is a top complaint in app reviews. Test it on real devices.
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Push on mobile | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Desktop notifications | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Email digest of missed messages | ✅ | ✅ | ❌ | ❌ | ⚠️ | ✅ (Synapse) |
+| Per-room level: all / mentions / none | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Keyword alerts | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Do Not Disturb with schedule | ✅ | ✅ | ⚠️ OS | ⚠️ | ✅ | ⚠️ |
+| Reply from notification | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+| Hide message content in push | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Activity feed / inbox | ✅ | ✅ | ❌ | ❌ | ✅ | ⚠️ |
+| Custom sounds | ✅ | ✅ | ✅ | ✅ | ⚠️ | ⚠️ |
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| NTF-01 | P0 | Happy | Message while app in background / killed | Push arrives within seconds |
+| NTF-02 | P0 | Happy | Tap notification | Opens right room and message |
+| NTF-03 | P0 | Edge | Read on desktop | Mobile notification cleared |
+| NTF-04 | P0 | Edge | Muted room | No push, no sound |
+| NTF-05 | P1 | Edge | Mentions-only room, message without mention | No push |
+| NTF-06 | P1 | Edge | DND on, then a mention / a call | Silent, per DND rules |
+| NTF-07 | P0 | Security | Encrypted room push | Server push payload has no plaintext |
+| NTF-08 | P1 | Security | Lock screen with "hide content" on | Only "New message" shown |
+| NTF-09 | P1 | Edge | 100 messages arrive at once | Grouped, no notification storm |
+| NTF-10 | P1 | Edge | Notification for an edited / deleted message | Updated or removed |
+| NTF-11 | P1 | Edge | Logged out / device removed | No more pushes to that device |
+| NTF-12 | P1 | Edge | Push token expires / app reinstalled | Re-registers automatically |
+| NTF-13 | P1 | Edge | iOS Focus mode, Android battery saver, Xiaomi/Huawei aggressive battery kill | Still delivered or user guided to fix |
+| NTF-14 | P2 | Happy | Email digest | Sent only for unread messages, unsubscribe works |
+| NTF-15 | P1 | Edge | Your own message on another device | Does not notify you |

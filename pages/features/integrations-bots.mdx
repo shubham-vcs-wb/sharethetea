@@ -1,0 +1,31 @@
+# Integrations, Bots & Widgets
+
+Enterprise buyers ask "does it connect to Jira, GitHub, Google Drive, Salesforce?" in the first meeting.
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Public API | ✅ | ✅ Graph | ✅ Business API | ✅ | ✅ | ✅ Matrix CS API |
+| Bots | ✅ | ✅ | ✅ business | ✅ | ✅ | ✅ |
+| Incoming webhooks | ✅ | ✅ | ❌ | ⚠️ via bot | ✅ | ✅ hookshot |
+| App marketplace | ✅ | ✅ | ❌ | ⚠️ | ✅ | ⚠️ integration manager |
+| Interactive messages (buttons, forms) | ✅ Block Kit | ✅ Adaptive Cards | ✅ | ✅ | ✅ | ⚠️ |
+| Tabs / embedded apps in a channel | ✅ | ✅ | ❌ | ✅ Mini Apps | ✅ Activities | ✅ widgets |
+| Workflow builder (no-code) | ✅ | ✅ Power Automate | ❌ | ❌ | ❌ | ❌ |
+| Bridges to other chat apps | ⚠️ | ⚠️ | ❌ | ❌ | ❌ | ✅ bridges |
+| AI assistant | ✅ | ✅ Copilot | ✅ Meta AI | ⚠️ | ⚠️ | ❌ |
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| INT-01 | P1 | Happy | Install integration, post via webhook | Message appears with bot label |
+| INT-02 | P0 | Security | Webhook URL leaked / revoked | Revocation stops it instantly |
+| INT-03 | P0 | Security | Bot tries to read rooms it was not added to | Denied |
+| INT-04 | P1 | Edge | Bot sends 100 messages per second | Rate-limited, room still usable |
+| INT-05 | P1 | Edge | Button clicked twice / after bot is removed | Idempotent / clear error |
+| INT-06 | P1 | Security | Widget from untrusted URL | Permission prompt; sandboxed iframe |
+| INT-07 | P1 | Edge | Third-party service down | Graceful error, chat unaffected |
+| INT-08 | P1 | Security | API token scopes | Token can do only what its scope says |
+| INT-09 | P2 | Edge | Bridge message with formatting / attachments | Converted without loss or duplicates |

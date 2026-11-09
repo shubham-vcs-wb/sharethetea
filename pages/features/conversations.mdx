@@ -1,0 +1,151 @@
+# Channels, DMs & Groups
+
+How people get into conversations and who can see what.
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1:1 direct messages | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Group DMs | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Public channels | ✅ | ✅ | ⚠️ Communities | ✅ | ✅ | ✅ |
+| Private / invite-only channels | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Announcement-only channel | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ via power levels |
+| Shared channels with other orgs | ✅ Connect | ✅ Shared | ❌ | ❌ | ❌ | ✅ Federation |
+| Guest / external users | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
+| Roles and permissions per channel | ⚠️ | ✅ | ⚠️ | ✅ | ✅ | ✅ |
+| Join by link / QR code | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Knock / request to join | ❌ | ❌ | ✅ | ✅ | ❌ | ✅ |
+| Archive channel | ✅ | ✅ | ✅ | ❌ | ❌ | ⚠️ |
+| Mute / favourite / low priority | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Custom sections / folders | ✅ | ✅ | ⚠️ | ✅ | ✅ | ✅ |
+| Slow mode | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ |
+| Block user | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ (ignore) |
+| Report message / user | ⚠️ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+## Test cases
+
+### Creating and joining
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CNV-01 | P0 | Happy | Start a DM with a user | Created once; starting again opens the same DM |
+| CNV-02 | P1 | Edge | Two users start a DM with each other at the same moment | One DM, or duplicates merged |
+| CNV-03 | P0 | Happy | Create public and private channel | Visibility correct in directory and search |
+| CNV-04 | P0 | Security | Non-member opens private channel by URL or API | Denied; no name or member list leaked |
+| CNV-05 | P1 | Edge | Duplicate name, very long name, emoji-only name | Rules enforced consistently |
+| CNV-06 | P1 | Happy | Join via invite link; expired/revoked link | Works; bad link shows clear error |
+| CNV-07 | P1 | Edge | Invite link used after max uses | Rejected |
+| CNV-08 | P1 | Happy | Request to join; admin approves / denies | Requester notified both ways |
+
+### Membership and roles
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CNV-10 | P0 | Happy | Invite, accept, decline | Membership correct, shown in timeline |
+| CNV-11 | P0 | Happy | Remove (kick) member | Access lost immediately on all devices |
+| CNV-12 | P0 | Happy | Ban member, they retry via link | Rejoin blocked |
+| CNV-13 | P0 | Edge | Last admin leaves | Blocked or admin passed on; never ownerless |
+| CNV-14 | P1 | Edge | Demote yourself | Warning shown first |
+| CNV-15 | P1 | Security | Moderator promotes someone above own level | Blocked by server |
+| CNV-16 | P1 | Edge | Removed user still has channel open | UI updates, composer disabled |
+| CNV-17 | P1 | Edge | Guest tries directory, room creation, invites | Only what guest policy allows |
+| CNV-18 | P1 | Edge | Deactivated user's DMs | Shown as deactivated, no new messages |
+
+### Organising
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| CNV-20 | P1 | Happy | Mute, favourite, mark unread, low priority | Persists and syncs across devices |
+| CNV-21 | P1 | Edge | Archive channel then search it | Read-only, searchable per policy |
+| CNV-22 | P2 | Edge | 1,000+ rooms in sidebar | Smooth scroll, filter works |
+| CNV-23 | P1 | Happy | Block user | No messages, calls or invites from them |
+| CNV-24 | P1 | Happy | Report message | Reaches admin queue with context |
+| CNV-25 | P1 | Edge | Mark all read on another device | Badges clear everywhere |
+
+## Room / channel / group settings
+
+Settings split into two kinds: **room settings** (admins change them, everyone is affected) and **personal settings** (each member changes them, only they are affected).
+
+### Room settings (admin-controlled)
+
+| Setting | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Name, topic / description, avatar | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Public ↔ private conversion | ✅ | ⚠️ | ❌ | ✅ | ✅ | ✅ |
+| Join rule: invite / link / knock / anyone in space | ⚠️ | ⚠️ | ✅ | ✅ | ⚠️ | ✅ |
+| Publish to room directory | ✅ | ✅ | ⚠️ | ✅ | ✅ | ✅ |
+| Room address / alias / vanity URL | ⚠️ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Guest access on / off | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
+| History visibility for new members | ❌ | ⚠️ | ⚠️ | ✅ | ⚠️ | ✅ |
+| Who can post (all / admins only) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Who can edit info / invite / pin / mention @room | ⚠️ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Who can start calls / share screen | ⚠️ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Custom roles and power levels | ❌ | ⚠️ | ⚠️ | ✅ | ✅ | ✅ |
+| Add / remove admins and moderators | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Approve new members | ❌ | ❌ | ✅ | ✅ | ⚠️ | ✅ knock |
+| Banned users list | ⚠️ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Slow mode | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ |
+| Disappearing messages default | ❌ | ❌ | ✅ | ✅ | ❌ | ⚠️ |
+| Restrict forwarding / saving content | ❌ | ⚠️ | ⚠️ | ✅ | ❌ | ❌ |
+| Enable encryption | n/a | ❌ | ✅ always | ❌ | ❌ | ✅ |
+| Retention override for this room | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
+| Integrations / bots / widgets | ✅ | ✅ tabs | ❌ | ✅ | ✅ | ✅ |
+| Link previews on / off | ⚠️ | ❌ | ❌ | ❌ | ⚠️ | ✅ |
+| Upgrade room version | n/a | n/a | n/a | n/a | n/a | ✅ |
+| Archive / delete room | ✅ | ✅ | ⚠️ | ✅ | ✅ | ⚠️ |
+| Transfer ownership | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+### Personal settings (per member)
+
+| Setting | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Notification level: all / mentions / off | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Mute for 1 h / 8 h / forever | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+| Custom notification sound | ⚠️ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| Favourite / pin to top | ✅ | ✅ | ✅ | ✅ | ⚠️ | ✅ |
+| Move to section / folder | ✅ | ✅ | ⚠️ | ✅ | ⚠️ | ✅ |
+| Per-room nickname / avatar | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Hide / archive chat for me | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+| Leave | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Export chat | ❌ | ❌ | ✅ | ✅ | ❌ | ✅ |
+
+### Settings test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| RST-01 | P0 | Happy | Admin changes name, topic, avatar | Updated for all members live; change shown in timeline |
+| RST-02 | P0 | Security | Normal member opens settings | Admin-only options hidden or read-only; server rejects API calls |
+| RST-03 | P1 | Edge | Two admins change the same setting at the same time | Last write wins cleanly; no half-saved state |
+| RST-04 | P1 | Edge | Name / topic at max length, empty, emoji, RTL, HTML | Validated; HTML shown as text |
+| RST-05 | P1 | Edge | Avatar: huge file, wrong format, remove avatar | Clear error; fallback initials shown |
+| RST-06 | P0 | Security | Switch public → private | Leaves directory; non-members lose preview; existing links stop working if designed |
+| RST-07 | P1 | Edge | Switch private → public | Warning shown; history visibility explained |
+| RST-08 | P0 | Security | History visibility "since joined" | New member cannot read older messages, also via API |
+| RST-09 | P1 | Edge | Change history visibility after messages exist | Only applies as documented; no retroactive leak |
+| RST-10 | P0 | Happy | Set "admins only can post" | Members see disabled composer; server rejects their messages |
+| RST-11 | P1 | Edge | Member is typing when post permission is removed | Send fails with clear reason, draft kept |
+| RST-12 | P0 | Security | Moderator gives themselves admin, or edits a higher role | Blocked |
+| RST-13 | P1 | Edge | Custom role with zero permissions / all permissions | Behaves exactly as configured |
+| RST-14 | P1 | Happy | Who-can-call / who-can-share-screen restrictions | Enforced in calls, not only hidden buttons |
+| RST-15 | P1 | Happy | Guest access off | Guests removed or blocked from joining per design |
+| RST-16 | P1 | Happy | Join rule: knock | Requests show to admins; approve / deny works |
+| RST-17 | P1 | Edge | Join rule: "anyone in space" and user leaves the space | Cannot rejoin room |
+| RST-18 | P1 | Happy | Room alias / vanity URL: set, change, delete, duplicate | Old alias stops; duplicates rejected |
+| RST-19 | P0 | Happy | Enable encryption | Cannot be disabled afterwards; all new messages encrypted |
+| RST-20 | P1 | Edge | Enable encryption with bots / bridges in room | Warning that they may stop working |
+| RST-21 | P1 | Happy | Slow mode 30 s | Member blocked until timer ends; admins exempt |
+| RST-22 | P1 | Happy | Disappearing messages default | New messages expire on all devices; old ones untouched |
+| RST-23 | P1 | Happy | Restrict forwarding / saving | Forward, copy, download blocked in UI |
+| RST-24 | P1 | Happy | Room retention override (e.g. 7 days) | Old messages removed on server and clients |
+| RST-25 | P0 | Happy | Transfer ownership, then old owner leaves | New owner has full control |
+| RST-26 | P1 | Happy | Banned list: unban user | User can rejoin per join rule |
+| RST-27 | P1 | Happy | Upgrade room version (Element) | Members moved to new room; old room links forward |
+| RST-28 | P1 | Happy | Archive room | Read-only, hidden from active list, restorable |
+| RST-29 | P0 | Edge | Delete room | All members lose it; files and messages removed per policy |
+| RST-30 | P1 | Happy | Every settings change in audit log | Who, what, when recorded |
+| RST-31 | P1 | Happy | Per-room notification level and timed mute | Respected; mute ends at the right time |
+| RST-32 | P1 | Edge | Personal settings sync to other devices | Same on phone and desktop |
+| RST-33 | P1 | Happy | Per-room nickname | Shows only in that room |
+| RST-34 | P1 | Happy | Export chat | Complete file with media; encrypted rooms handled |
+| RST-35 | P1 | Edge | Settings changed while a member is offline | Applied as soon as they reconnect |

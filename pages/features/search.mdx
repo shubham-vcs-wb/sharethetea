@@ -1,0 +1,27 @@
+# Search
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Search messages across all rooms | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Search in encrypted rooms | n/a | n/a | ✅ local | ✅ | n/a | ⚠️ Desktop only (Seshat) |
+| Filters: from, in, date, has-file | ✅ | ✅ | ⚠️ | ✅ | ✅ | ⚠️ |
+| Search files | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+| Search people / rooms directory | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Jump to result in context | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Quick switcher (Ctrl+K) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| SRC-01 | P0 | Happy | Search a word sent today and one year ago | Both found |
+| SRC-02 | P0 | Security | Search returns only rooms the user can see | No results from private rooms the user left or never joined |
+| SRC-03 | P0 | Security | Deleted / edited message | Old text no longer found |
+| SRC-04 | P1 | Edge | Search special chars, quotes, emoji, non-Latin (Chinese, Hindi) | Works |
+| SRC-05 | P1 | Edge | Search with 10,000 hits | Paginates fast |
+| SRC-06 | P1 | Happy | Click result | Jumps to message with surrounding history |
+| SRC-07 | P1 | Edge | Encrypted room on web vs desktop | Behaviour clearly explained to user |
+| SRC-08 | P2 | Edge | Typo / partial word | Reasonable matching |
+| SRC-09 | P1 | Security | Search input with SQL / regex injection strings | No error, no leak |

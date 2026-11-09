@@ -1,0 +1,19 @@
+# Network & Offline
+
+Real users are on trains, hotel Wi-Fi and corporate VPNs. Simulate bad networks on purpose.
+
+**Tools:** Chrome DevTools throttling, macOS Network Link Conditioner, Android emulator network settings, `tc netem` on Linux, Clumsy on Windows.
+
+| ID | Priority | Scenario | Expected |
+| --- | --- | --- | --- |
+| NET-01 | P0 | Go offline, compose 5 messages, come online | All sent in order |
+| NET-02 | P0 | Offline banner | Shown within a few seconds, hidden on reconnect |
+| NET-03 | P0 | Open app with no network | Cached rooms and messages readable |
+| NET-04 | P0 | Server restart while clients connected | Clients reconnect on their own, no lost messages |
+| NET-05 | P1 | Flaky network (connect/disconnect every 5 s) | No duplicates, no crash |
+| NET-06 | P1 | Slow 3G | App usable, images load progressively |
+| NET-07 | P1 | Captive portal (hotel Wi-Fi login page) | Detected, not reported as server error |
+| NET-08 | P1 | Corporate proxy / VPN / only port 443 open | App and calls still work |
+| NET-09 | P1 | Laptop asleep 8 hours | Catches up fast on wake, unread counts correct |
+| NET-10 | P1 | Clock on device wrong by hours | Message order still correct (server time used) |
+| NET-11 | P2 | IPv6-only network | Works |

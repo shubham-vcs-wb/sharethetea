@@ -1,0 +1,36 @@
+# Workspaces, Spaces & Servers
+
+The top-level container that groups channels and people.
+
+| Product | Name for it |
+| --- | --- |
+| Slack | Workspace (and Enterprise Grid org) |
+| Teams | Team (inside a tenant) |
+| WhatsApp | Community |
+| Telegram | Folder / supergroup with topics |
+| Discord | Server (guild) |
+| Element | Space |
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Multiple workspaces per user | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Nested sub-groups | ⚠️ | ⚠️ | ❌ | ⚠️ | ⚠️ categories | ✅ sub-spaces |
+| Workspace-wide roles | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+| Default channels for new members | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ suggested rooms |
+| Onboarding / rules screen | ⚠️ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| Directory of channels | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
+| Cross-org federation | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| WSP-01 | P0 | Happy | Create space, add rooms, invite people | Members see the rooms they are allowed to |
+| WSP-02 | P1 | Edge | Room in two spaces at once | Shows in both, unread counted once |
+| WSP-03 | P1 | Edge | Sub-space loops (A contains B contains A) | Prevented or handled without hang |
+| WSP-04 | P0 | Security | Leave space | Option to leave its rooms too; private rooms not visible after |
+| WSP-05 | P1 | Happy | Switch workspaces quickly | Unread badges correct per workspace |
+| WSP-06 | P1 | Edge | Delete or remove a room from space | Members keep or lose access per design |
+| WSP-07 | P1 | Edge | Federated user from another server joins | Works; their server's policies respected |

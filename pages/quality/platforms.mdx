@@ -1,0 +1,36 @@
+# Platform-specific
+
+## Test matrix
+
+Test every P0 case on each of these at least once per release.
+
+| Platform | Versions to cover |
+| --- | --- |
+| Web | Latest Chrome, Edge, Firefox, Safari |
+| Desktop | Windows 10 & 11, macOS latest two, Ubuntu LTS |
+| iOS | Latest two major versions, one small iPhone, one iPad |
+| Android | Android 10+, Samsung, Pixel, one Xiaomi or Huawei |
+
+## Mobile
+
+| ID | Priority | Scenario | Expected |
+| --- | --- | --- | --- |
+| MOB-01 | P0 | Incoming call on locked phone | Native full-screen call UI |
+| MOB-02 | P0 | App killed by OS, message arrives | Push still works |
+| MOB-03 | P1 | Rotate during call and while typing | No lost state |
+| MOB-04 | P1 | Share from another app (photo, link) into chat | Works |
+| MOB-05 | P1 | Low storage on device | Clear warning, no crash |
+| MOB-06 | P1 | App update with pending messages | Messages kept and sent |
+| MOB-07 | P1 | Dark mode, dynamic type | Correct |
+
+## Desktop and web
+
+| ID | Priority | Scenario | Expected |
+| --- | --- | --- | --- |
+| DSK-01 | P1 | Auto-update | Updates without losing session |
+| DSK-02 | P1 | Start on login, minimise to tray | Works per setting |
+| DSK-03 | P1 | Multiple monitors with different DPI | Sharp rendering |
+| DSK-04 | P1 | Deep links (app://room/...) | Open correct room |
+| WEB-01 | P1 | Two tabs open at once | No conflicts, one handles notifications |
+| WEB-02 | P1 | Private / incognito window | Works or explains limits |
+| WEB-03 | P1 | Browser blocks notifications / third-party cookies | Graceful |

@@ -1,0 +1,17 @@
+export default {
+    messaging: "Messaging Basics",
+    conversations: "Channels, DMs & Groups",
+    "threads-reactions": "Threads, Replies & Reactions",
+    "files-media": "Files & Media",
+    search: "Search",
+    notifications: "Notifications",
+    "presence-profiles": "Presence & Profiles",
+    calls: "Voice & Video Calls",
+    meetings: "Meetings & Conferencing",
+    "screen-sharing": "Screen Sharing",
+    workspaces: "Workspaces, Spaces & Servers",
+    "integrations-bots": "Integrations, Bots & Widgets",
+    "security-encryption": "Security & Encryption",
+    "auth-accounts": "Authentication & Accounts",
+    "admin-compliance": "Admin & Compliance",
+};

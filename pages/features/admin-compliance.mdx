@@ -1,0 +1,36 @@
+# Admin & Compliance
+
+What IT and legal teams check before they sign a contract.
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Admin console | ✅ | ✅ | ⚠️ Business | ❌ | ⚠️ server settings | ✅ Synapse Admin / Element Server Suite |
+| User management (add, suspend, reset) | ✅ | ✅ | ❌ | ❌ | ⚠️ | ✅ |
+| Retention policies | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
+| Legal hold | ✅ | ✅ | ❌ | ❌ | ❌ | ⚠️ |
+| eDiscovery / export | ✅ | ✅ Purview | ❌ | ❌ | ❌ | ⚠️ |
+| Audit logs | ✅ | ✅ | ❌ | ❌ | ✅ | ⚠️ |
+| DLP (block sensitive data) | ✅ | ✅ | ❌ | ❌ | ⚠️ AutoMod | ❌ |
+| Moderation (word filters, auto-ban) | ⚠️ | ⚠️ | ⚠️ | ✅ | ✅ AutoMod | ✅ Mjolnir / Draupnir |
+| Information barriers | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Usage analytics | ✅ | ✅ | ❌ | ❌ | ✅ | ⚠️ |
+| Certifications (SOC 2, ISO 27001, HIPAA) | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ (Element) |
+| Mobile device management (MDM) | ✅ | ✅ Intune | ❌ | ❌ | ❌ | ✅ |
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| ADM-01 | P0 | Happy | Admin suspends user | All sessions end; user can't log in |
+| ADM-02 | P0 | Security | Non-admin calls admin API | 403 |
+| ADM-03 | P0 | Happy | Retention 30 days | Older messages and files removed from server, search and backups per policy |
+| ADM-04 | P0 | Edge | Legal hold on user + retention policy | Hold wins; content kept |
+| ADM-05 | P1 | Happy | eDiscovery export by user and date range | Complete, includes edits and deletions |
+| ADM-06 | P1 | Happy | Audit log for logins, admin actions, permission changes | Every action logged with who / when / IP |
+| ADM-07 | P1 | Security | Admin tries to tamper with audit log | Not possible |
+| ADM-08 | P1 | Happy | DLP blocks a credit card number | Blocked or warned, admin alerted |
+| ADM-09 | P1 | Happy | Moderation ban list shared across rooms | Banned user removed everywhere |
+| ADM-10 | P1 | Edge | GDPR erasure request | All personal data removed; others' messages stay |
+| ADM-11 | P1 | Happy | MDM: disable copy / paste, force app PIN | Policies applied on device |

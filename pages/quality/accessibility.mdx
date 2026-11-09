@@ -1,0 +1,26 @@
+# Accessibility & i18n
+
+Government and large enterprise buyers require **WCAG 2.1 AA** (often a VPAT document). Teams and Slack both publish one.
+
+## Accessibility
+
+| ID | Priority | Scenario | Expected |
+| --- | --- | --- | --- |
+| A11Y-01 | P0 | Use the whole app with keyboard only | Every action reachable, focus visible |
+| A11Y-02 | P0 | Screen reader (NVDA, JAWS, VoiceOver, TalkBack) | New messages announced, buttons labelled |
+| A11Y-03 | P1 | 200% zoom and large OS font | No clipped text or overlap |
+| A11Y-04 | P1 | High-contrast mode, colour-blind check | Status not shown by colour alone |
+| A11Y-05 | P1 | Reduced motion setting | Animations reduced |
+| A11Y-06 | P1 | Incoming call with screen reader | Announced, answer button reachable |
+| A11Y-07 | P2 | Captions in calls for deaf users | Available |
+| A11Y-08 | P1 | Automated scan (axe) on main screens | No critical issues |
+
+## Internationalisation
+
+| ID | Priority | Scenario | Expected |
+| --- | --- | --- | --- |
+| I18N-01 | P1 | Switch language | All UI translated, no raw keys |
+| I18N-02 | P1 | RTL language (Arabic) | Layout mirrors correctly |
+| I18N-03 | P1 | German / Finnish long words | No overflow |
+| I18N-04 | P1 | Date, time, number formats by locale | Correct, 12h / 24h respected |
+| I18N-05 | P2 | Plural rules (Russian, Polish) | Grammatically correct |

@@ -1,0 +1,28 @@
+# Screen Sharing
+
+## Feature list
+
+| Feature | Slack | Teams | WhatsApp | Telegram | Discord | Element |
+| --- | --- | --- | --- | --- | --- | --- |
+| Share whole screen | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Share single window / tab | ✅ | ✅ | ⚠️ | ✅ | ✅ | ✅ |
+| Share system audio | ⚠️ | ✅ | ❌ | ⚠️ | ✅ | ⚠️ |
+| Draw / annotate on shared screen | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Give / request remote control | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Multiple people sharing at once | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Share from mobile | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+
+## Test cases
+
+| ID | Priority | Type | Scenario | Expected |
+| --- | --- | --- | --- | --- |
+| SCR-01 | P0 | Happy | Share screen, viewer sees it | Under 2 s delay, text readable |
+| SCR-02 | P0 | Negative | OS screen-recording permission missing (macOS) | Clear guide to enable |
+| SCR-03 | P1 | Edge | Shared window is minimised or closed | Viewer sees paused / ended state |
+| SCR-04 | P1 | Edge | Sharer switches monitor or changes resolution | Stream adapts |
+| SCR-05 | P1 | Edge | Share on 4K and ultrawide monitors | Viewer can zoom / fit |
+| SCR-06 | P1 | Security | Notifications pop up during share | Private notification content hidden while sharing |
+| SCR-07 | P1 | Edge | Two people start sharing at the same time | Policy enforced (allow both, or one takes over) |
+| SCR-08 | P1 | Security | Attendee shares when policy forbids | Blocked by server |
+| SCR-09 | P2 | Happy | Share with system audio (video playback) | Audio in sync |
+| SCR-10 | P2 | Edge | Remote control request, approve, revoke | Control stops instantly on revoke |
