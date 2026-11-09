@@ -12,6 +12,36 @@
 | Custom emoji | ✅ | ✅ | ❌ | ✅ | ✅ | ⚠️ |
 | See who reacted | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
+## Who gets notified about thread replies
+
+A thread reply does **not** notify everyone in the room. Only thread followers get notified.
+
+A user follows a thread when they:
+
+- **Started it** — they wrote the root message.
+- **Replied in it** — any reply makes them a follower.
+- **Are @mentioned** in the root or any reply.
+- **Follow it explicitly** — they tap "Follow thread".
+
+Everyone else sees only the reply count on the root message.
+
+Extra rules:
+
+- **Unfollow wins.** A user who unfollows stops getting notified, even if they started or replied. Only a new @mention makes them follow again.
+- **1:1 DMs.** Every thread reply notifies the other person.
+- **Room level still applies.** Following a thread in a muted or mentions-only room does not override that room's level.
+
+### How other apps do it
+
+| App | Started it | @mentioned | Replied | Manual follow | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Slack | ✅ | ✅ | ✅ | ✅ Follow / Unfollow | In 1:1 DMs, every thread reply notifies |
+| Teams | ✅ | ✅ | ✅ | ✅ | A channel setting can follow every new thread |
+| Discord | ✅ | ⚠️ developer docs only | ✅ posting joins you | ✅ Join Thread | Joined threads default to "All messages", ignoring the server's mentions-only setting. Users dislike this |
+| Element | ✅ | ✅ normal mention rules | ✅ | ⚠️ no clear follow button | Matrix counts "participated" as wrote the root or replied |
+| Telegram | — | — | — | — | No real threads. Replies to your comments go to a "Replies" chat |
+| WhatsApp | — | — | — | — | No threads |
+
 ## Test cases
 
 | ID | Priority | Type | Scenario | Expected |
@@ -23,6 +53,16 @@
 | THR-05 | P1 | Edge | Reply to a message far back in history | Jump-to-original loads it |
 | THR-06 | P1 | Edge | Mention inside a thread | Notifies and deep-links into thread |
 | THR-07 | P2 | Edge | Older client without thread support | Fallback shows normal replies |
+| THR-08 | P0 | Happy | Someone replies in a thread you started | You get notified |
+| THR-09 | P0 | Edge | Room member who never joined the thread, new reply | No notification; only root reply count updates |
+| THR-10 | P1 | Happy | You're @mentioned in a reply | You get notified and now follow the thread |
+| THR-11 | P1 | Happy | Tap "Follow thread", then a new reply arrives | You get notified |
+| THR-12 | P1 | Edge | Unfollow a thread, then a new reply arrives | No notification |
+| THR-13 | P1 | Edge | Unfollow, then get @mentioned again | Notified once more, follows again |
+| THR-14 | P0 | Happy | You reply in a thread you didn't start, then someone else replies | You now follow it and get notified |
+| THR-15 | P1 | Happy | Thread reply in a 1:1 DM | Other person is notified |
+| THR-16 | P1 | Edge | You follow a thread in a muted room, new reply | No push; only the thread unread count updates |
+| THR-17 | P1 | Edge | You follow a thread in a mentions-only room, reply without a mention | No push |
 | RCT-01 | P0 | Happy | Add and remove reaction | Count updates live for all |
 | RCT-02 | P1 | Edge | Two users add same emoji at once | Count is 2, nothing lost |
 | RCT-03 | P1 | Edge | Same user taps same reaction twice fast | One reaction only |
